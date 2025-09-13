@@ -3,22 +3,7 @@ import { createContext, useEffect, useState } from "react";
 export const AddContext = createContext();
 
 const AddProvider = ({ children }) => {
-  // 🛒 CART
-  const [cartItems, setCartItems] = useState(() => {
-    try {
-      const saveCart = localStorage.getItem("cartItems");
-      return saveCart ? JSON.parse(saveCart) : [];
-    } catch (error) {
-      console.error("Error parsing cartItems from localStorage:", error);
-      return [];
-    }
-  });
-
-  // 🛍️ PRODUCTS
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // 👤 USERS & AUTH
+  // --- USERS & AUTH ---
   const [users, setUsers] = useState([]);
   const [userLoading, setUserLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(() => {
@@ -26,41 +11,62 @@ const AddProvider = ({ children }) => {
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  // 🌙 DARK MODE
+  // --- CART ---
+  const [cartItems, setCartItems] = useState(() => {
+    if (!currentUser) return [];
+    const savedCart = localStorage.getItem(`cart_${currentUser.username}`);
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  // --- PRODUCTS ---
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // --- DARK MODE ---
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem("darkMode");
     return saved ? JSON.parse(saved) : false;
   });
 
-  // --- Persist States ---
-  useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
-
+  // --- Persist DARK MODE ---
   useEffect(() => {
     localStorage.setItem("darkMode", JSON.stringify(darkMode));
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    if (darkMode) document.documentElement.classList.add("dark");
+    else document.documentElement.classList.remove("dark");
   }, [darkMode]);
 
+  // --- Persist current user ---
   useEffect(() => {
     localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    // load user's cart on login
+    if (currentUser) {
+      const savedCart = localStorage.getItem(`cart_${currentUser.username}`);
+      setCartItems(savedCart ? JSON.parse(savedCart) : []);
+    } else {
+      setCartItems([]);
+    }
   }, [currentUser]);
+
+  // --- Persist cart per user ---
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem(
+        `cart_${currentUser.username}`,
+        JSON.stringify(cartItems)
+      );
+    }
+  }, [cartItems, currentUser]);
 
   // --- Fetch Products ---
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const url = "https://fakestoreapi.com/products";
-        const res = await fetch(url);
+        const res = await fetch("https://fakestoreapi.com/products");
         const result = await res.json();
         setData(result);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching products:", error);
       } finally {
         setLoading(false);
       }
@@ -85,9 +91,11 @@ const AddProvider = ({ children }) => {
     fetchUsers();
   }, []);
 
-  // --- Auth Functions ---
-  const login = (username) => {
-    const foundUser = users.find((u) => u.username === username);
+  // --- AUTH FUNCTIONS ---
+  const login = (usernameOrEmail) => {
+    const foundUser = users.find(
+      (u) => u.username === usernameOrEmail || u.email === usernameOrEmail
+    );
     if (foundUser) {
       setCurrentUser(foundUser);
       return true;
@@ -97,40 +105,40 @@ const AddProvider = ({ children }) => {
 
   const logout = () => {
     setCurrentUser(null);
-    setCartItems([]); // clear cart when logged out
+    setCartItems([]);
   };
 
-  // --- Cart Functions (only if logged in) ---
-const addToCart = (product) => {
-  if (!currentUser) {
-    alert("⚠️ Please log in to add items to cart!");
-    return;
-  }
-
-  setCartItems((prev) => {
-    const existing = prev.find((item) => item.id === product.id);
-    if (existing) {
-      return prev.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-      );
+  // --- CART FUNCTIONS ---
+  const addToCart = (product, redirectToLogin) => {
+    if (!currentUser) {
+      if (redirectToLogin) redirectToLogin();
+      return;
     }
-    return [...prev, { ...product, quantity: 1 }];
-  });
-};
 
-  const removeFromCart = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+    setCartItems((prev) => {
+      const existing = prev.find((item) => item.id === product.id);
+      if (existing) {
+        return prev.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
   };
 
-  const increaseQuantity = (id) => {
+  const removeFromCart = (id) =>
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+
+  const increaseQuantity = (id) =>
     setCartItems((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
-  };
 
-  const decreaseQuantity = (id) => {
+  const decreaseQuantity = (id) =>
     setCartItems((prev) =>
       prev
         .map((item) =>
@@ -138,32 +146,21 @@ const addToCart = (product) => {
         )
         .filter((item) => item.quantity > 0)
     );
-  };
 
-  const clearCart = () => {
-    setCartItems([]);
-  };
+  const clearCart = () => setCartItems([]);
 
-  // --- Provided Values ---
+  // --- PROVIDE VALUES ---
   const value = {
-    // products
     data,
     loading,
-
-    // cart
     cartItems,
-    setCartItems,
     addToCart,
     removeFromCart,
-    clearCart,
     increaseQuantity,
     decreaseQuantity,
-
-    // dark mode
+    clearCart,
     darkMode,
     toggleDarkMode: () => setDarkMode((prev) => !prev),
-
-    // users & auth
     users,
     userLoading,
     currentUser,

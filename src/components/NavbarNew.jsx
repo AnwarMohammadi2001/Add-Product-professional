@@ -4,6 +4,8 @@ import { FaUserCircle } from "react-icons/fa";
 import Drawer_First from "./Drawer_First";
 import { AddContext } from "../Context/AddContext";
 import Login from "./Login";
+import { img } from "framer-motion/client";
+import { div } from "framer-motion/m";
 
 const NavbarNew = () => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
@@ -63,18 +65,30 @@ const NavbarNew = () => {
 
         {/* User Icon */}
         <div className="relative">
-          <span></span>
-          <FaUserCircle
-            onClick={handleUserClick}
-            size={30}
-            className="cursor-pointer hover:scale-105 transition-all duration-300 text-gray-900 dark:text-gray-100"
-          />
+          {
+            /* If you want to use a different icon when logged in, you can conditionally render here */
+            /* For simplicity, using the same icon */
+            currentUser ? (
+              <div
+                className="cursor-pointer hover:scale-105 transition-all duration-300 h-8 w-8 rounded-full overflow-hidden border-2 border-gray-300"
+                onClick={handleUserClick}
+              >
+                <img src={currentUser.image} alt="" className="h-8 w-8" />
+              </div>
+            ) : (
+              <FaUserCircle
+                onClick={handleUserClick}
+                size={30}
+                className="cursor-pointer hover:scale-105 transition-all duration-300 text-gray-900 dark:text-gray-100"
+              />
+            )
+          }
 
           {/* Dropdown menu for logged-in user */}
           {showUserMenu && currentUser && (
             <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 shadow-lg rounded-md py-2 z-50">
               <p className="px-4 py-2 text-gray-900 dark:text-gray-100">
-                Hello, {currentUser.name}!
+                Hello, {currentUser.firstName}!
               </p>
               <button
                 onClick={logout}
