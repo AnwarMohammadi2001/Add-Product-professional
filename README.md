@@ -1,12 +1,64 @@
-# React + Vite
+# React + Vite Shop Template
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a modern React e-commerce template built with Vite and Tailwind CSS, featuring a fully functional shopping cart, user authentication, and dark mode.
 
-Currently, two official plugins are available:
+## Features
+🛒 Shopping Cart
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Add products to cart (requires login).
 
-## Expanding the ESLint configuration
+Increase or decrease item quantity.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Remove items or clear cart completely.
+
+Each user's cart is saved individually in localStorage, persisting across page refreshes.
+
+## 👤 User Authentication
+
+Login with username or email.
+
+Persistent login using localStorage.
+
+Logout clears cart and session.
+
+Fetches users from a dummy API (https://dummyjson.com/users) for testing.
+
+## 🌙 Dark Mode
+
+Toggle between light and dark mode.
+
+Dark mode preference is saved in localStorage.
+
+Fully compatible with Tailwind's dark mode utilities.
+
+🛍 Products
+
+Fetch products from a dummy API (https://fakestoreapi.com/products).
+
+Display products in a responsive grid.
+
+Each product card shows image, title, and price.
+
+Users must be logged in to add products to the cart.
+
+## ⚡ Modern UI
+
+Responsive design using Tailwind CSS.
+
+Floating labels for login input fields.
+
+Animated buttons and hover effects for interactive experience.
+
+Dark mode-compatible colors and shadows.
+
+## 🧩 Technology Stack
+
+React 18 with Vite for fast HMR.
+
+Tailwind CSS for styling.
+
+React Context API for global state management (cart, users, dark mode).
+
+Framer Motion for animations.
+
+React Icons for consistent UI icons.
