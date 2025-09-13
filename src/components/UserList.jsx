@@ -10,7 +10,7 @@ function UserList() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
-      {users.map((user) => (
+      {users.slice(0, 8).map((user) => (
         <div
           key={user.id}
           className="border dark:border-gray-700 p-4 rounded-lg shadow hover:shadow-lg transition bg-white dark:bg-gray-800"
