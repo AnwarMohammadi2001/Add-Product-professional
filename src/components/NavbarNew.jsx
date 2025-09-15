@@ -6,12 +6,16 @@ import { AddContext } from "../Context/AddContext";
 import Login from "./Login";
 import Register from "./Register"; // ✅ import Register
 import { IoMdPersonAdd } from "react-icons/io";
-
+import { div } from "framer-motion/client";
+import { IoIosList } from "react-icons/io";
+import ListUser from "./ListUser";
+import { FaXmark } from "react-icons/fa6";
 const NavbarNew = () => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showUserList, setShowUserList] = useState(false);
 
   const { cartItems, darkMode, toggleDarkMode, currentUser, logout } =
     useContext(AddContext);
@@ -58,6 +62,15 @@ const NavbarNew = () => {
           >
             <span>Register</span>
             <IoMdPersonAdd />
+          </div>
+        )}
+        {currentUser && (
+          <div
+            onClick={() => setShowUserList(true)}
+            className="flex items-center gap-x-2 border py-1 px-2 rounded-md border-gray-300 cursor-pointer hover:bg-gray-200 duration-300 transition-colors"
+          >
+            <IoIosList size={28} className="text-green-500" />
+            <span>User List</span>
           </div>
         )}
 
@@ -120,12 +133,12 @@ const NavbarNew = () => {
       {/* Login Modal */}
       {showLogin && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-md shadow-md w-80 py-20 relative">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-md shadow-md w-[400px] py-20 relative">
             <button
               className="absolute top-5 left-1/2 -translate-1/2 text-red-500 dark:text-red-300"
               onClick={() => setShowLogin(false)}
             >
-              ✖
+              <FaXmark size={30} className="text-red-500" />
             </button>
             <Login />
           </div>
@@ -135,14 +148,27 @@ const NavbarNew = () => {
       {/* Register Modal */}
       {showRegister && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-md shadow-md w-80 relative">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-md shadow-md w-[400px] relative">
             <button
               className="absolute top-2 right-2 text-gray-500 dark:text-gray-300"
               onClick={() => setShowRegister(false)}
             >
-              ✖
+              <FaXmark size={30} className="text-red-500" />
             </button>
             <Register onClose={() => setShowRegister(false)} />
+          </div>
+        </div>
+      )}
+      {showUserList && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-md shadow-md w-[400px] relative">
+            <button
+              onClick={() => setShowUserList(false)}
+              className="text-red-400 text-base"
+            >
+              <FaXmark size={30} className="text-red-500" />
+            </button>
+            <ListUser />
           </div>
         </div>
       )}

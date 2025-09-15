@@ -5,6 +5,12 @@
       "name": "Ali",
       "email": "ali@gmail.com",
       "password": "open 123"
+    },
+    {
+      "id": "23fe",
+      "name": "ahmad",
+      "email": "anwarmohammadi1390@gmail.com",
+      "password": "open 123"
     }
   ]
 }
