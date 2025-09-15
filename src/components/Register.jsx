@@ -1,35 +1,44 @@
 import React, { useState, useContext } from "react";
 import { AddContext } from "../Context/AddContext";
 
-const Login = ({ onClose }) => {
-  const { login } = useContext(AddContext);
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+const Register = ({ onClose }) => {
+  const { addUser } = useContext(AddContext);
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = login(form.email, form.password);
-    if (res.success) {
-      onClose(); // close modal on success
-    } else {
-      setError(res.message);
+    const createdUser = await addUser(form);
+    if (createdUser) {
+      onClose(); // close modal after successful register
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-3 p-4 bg-white dark:bg-gray-900 rounded-md"
+    >
       <input
         type="text"
+        name="name"
+        placeholder="Name"
+        value={form.name}
+        onChange={handleChange}
+        className="border px-3 py-2 rounded"
+        required
+      />
+      <input
+        type="email"
         name="email"
-        placeholder="Email or Username"
+        placeholder="Email"
         value={form.email}
         onChange={handleChange}
-        required
         className="border px-3 py-2 rounded"
+        required
       />
       <input
         type="password"
@@ -37,18 +46,17 @@ const Login = ({ onClose }) => {
         placeholder="Password"
         value={form.password}
         onChange={handleChange}
-        required
         className="border px-3 py-2 rounded"
+        required
       />
-      {error && <p className="text-red-500 text-sm">{error}</p>}
       <button
         type="submit"
         className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
       >
-        Login
+        Register
       </button>
     </form>
   );
 };
 
-export default Login;
+export default Register;

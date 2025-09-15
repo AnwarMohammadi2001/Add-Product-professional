@@ -14,7 +14,7 @@ const AddProvider = ({ children }) => {
   // --- CART ---
   const [cartItems, setCartItems] = useState(() => {
     if (!currentUser) return [];
-    const savedCart = localStorage.getItem(`cart_${currentUser.username}`);
+    const savedCart = localStorage.getItem(`cart_${currentUser.name}`);
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
@@ -40,7 +40,7 @@ const AddProvider = ({ children }) => {
     localStorage.setItem("currentUser", JSON.stringify(currentUser));
     // load user's cart on login
     if (currentUser) {
-      const savedCart = localStorage.getItem(`cart_${currentUser.username}`);
+      const savedCart = localStorage.getItem(`cart_${currentUser.name}`);
       setCartItems(savedCart ? JSON.parse(savedCart) : []);
     } else {
       setCartItems([]);
@@ -51,7 +51,7 @@ const AddProvider = ({ children }) => {
   useEffect(() => {
     if (currentUser) {
       localStorage.setItem(
-        `cart_${currentUser.username}`,
+        `cart_${currentUser.name}`,
         JSON.stringify(cartItems)
       );
     }
@@ -79,9 +79,9 @@ const AddProvider = ({ children }) => {
     const fetchUsers = async () => {
       try {
         setUserLoading(true);
-        const res = await fetch("https://dummyjson.com/users");
+        const res = await fetch("http://localhost:5000/users");
         const result = await res.json();
-        setUsers(result.users);
+        setUsers(result); // ✅ not result.users
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
@@ -92,15 +92,17 @@ const AddProvider = ({ children }) => {
   }, []);
 
   // --- AUTH FUNCTIONS ---
-  const login = (usernameOrEmail) => {
+  const login = (email, password) => {
+    // Find user with matching email AND password
     const foundUser = users.find(
-      (u) => u.username === usernameOrEmail || u.email === usernameOrEmail
+      (u) => (u.email === email || u.name === email) && u.password === password
     );
+
     if (foundUser) {
       setCurrentUser(foundUser);
-      return true;
+      return { success: true, user: foundUser };
     }
-    return false;
+    return { success: false, message: "Invalid email or password" };
   };
 
   const logout = () => {
@@ -126,6 +128,22 @@ const AddProvider = ({ children }) => {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
+  };
+  // --- Add User (Register) ---
+  const addUser = async (newUser) => {
+    try {
+      const res = await fetch("http://localhost:5000/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser),
+      });
+      const createdUser = await res.json();
+      setUsers((prev) => [...prev, createdUser]);
+      setCurrentUser(createdUser); // auto login after register
+      return createdUser;
+    } catch (error) {
+      console.error("Error adding user:", error);
+    }
   };
 
   const removeFromCart = (id) =>
@@ -166,6 +184,7 @@ const AddProvider = ({ children }) => {
     currentUser,
     login,
     logout,
+    addUser,
   };
 
   return <AddContext.Provider value={value}>{children}</AddContext.Provider>;
