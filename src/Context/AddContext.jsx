@@ -145,6 +145,63 @@ const AddProvider = ({ children }) => {
       console.error("Error adding user:", error);
     }
   };
+  // Delete user
+  // --- Delete user ---
+  const deleteUser = async (id) => {
+    try {
+      // if deleting the logged-in user
+      if (currentUser && currentUser.id === id) {
+        const confirmDelete = window.confirm(
+          "Are you sure you want to delete your account? This will also remove your cart and log you out."
+        );
+        if (!confirmDelete) return; // stop if user disagrees
+
+        // delete request to json-server
+        await fetch(`http://localhost:5000/users/${id}`, {
+          method: "DELETE",
+        });
+
+        // remove from state
+        setUsers((prev) => prev.filter((u) => u.id !== id));
+
+        // clear localStorage (user + cart)
+        localStorage.removeItem("currentUser");
+        localStorage.removeItem(`cart_${currentUser.name}`);
+
+        // logout & reset cart
+        setCurrentUser(null);
+        setCartItems([]);
+      } else {
+        // deleting another user (admin case)
+        const confirmDelete = window.confirm(
+          "Are you sure you want to delete this user?"
+        );
+        if (!confirmDelete) return;
+
+        await fetch(`http://localhost:5000/users/${id}`, {
+          method: "DELETE",
+        });
+
+        setUsers((prev) => prev.filter((u) => u.id !== id));
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+  // Update user
+  const updateUser = async (id, updatedUser) => {
+    try {
+      const res = await fetch(`http://localhost:5000/users/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedUser),
+      });
+      const data = await res.json();
+      setUsers((prev) => prev.map((u) => (u.id === id ? data : u)));
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
 
   const removeFromCart = (id) =>
     setCartItems((prev) => prev.filter((item) => item.id !== id));
@@ -185,6 +242,8 @@ const AddProvider = ({ children }) => {
     login,
     logout,
     addUser,
+    deleteUser,
+    updateUser,
   };
 
   return <AddContext.Provider value={value}>{children}</AddContext.Provider>;

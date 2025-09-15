@@ -1,40 +1,9 @@
 {
   "users": [
     {
-      "id": "1",
-      "name": "Anwar",
-      "email": "anwar@example.com"
-    },
-    {
-      "id": "2",
+      "id": "4f54",
       "name": "Ali",
-      "email": "ali@example.com"
-    },
-    {
-      "id": "92a8",
-      "name": "ahmad",
-      "email": "ahmad@gmail.com"
-    },
-    {
-      "id": "2cce",
-      "name": "javad",
-      "email": "javad@gmail.com"
-    },
-    {
-      "id": "7ef7",
-      "name": "Mohammad",
-      "email": "mohammad@gmail.com",
-      "password": "open 123"
-    },
-    {
-      "id": "3cc0",
-      "password": "open 123",
-      "email": "mohammad@gmail.com"
-    },
-    {
-      "id": "d782",
-      "name": "alii",
-      "email": "alii@gmail.com",
+      "email": "ali@gmail.com",
       "password": "open 123"
     }
   ]

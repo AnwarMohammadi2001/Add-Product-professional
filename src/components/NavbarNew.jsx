@@ -51,13 +51,15 @@ const NavbarNew = () => {
       {/* Right icons */}
       <div className="flex items-center gap-4 relative">
         {/* Register Button */}
-        <div
-          onClick={() => setShowRegister(true)}
-          className="flex items-center gap-x-2 border py-2 px-4 rounded-md border-gray-300 cursor-pointer hover:bg-gray-200 duration-300 transition-colors"
-        >
-          <span>Register</span>
-          <IoMdPersonAdd />
-        </div>
+        {currentUser ? null : (
+          <div
+            onClick={() => setShowRegister(true)}
+            className="flex items-center gap-x-2 border py-2 px-4 rounded-md border-gray-300 cursor-pointer hover:bg-gray-200 duration-300 transition-colors"
+          >
+            <span>Register</span>
+            <IoMdPersonAdd />
+          </div>
+        )}
 
         {/* Cart Icon */}
         <div className="relative">
@@ -118,9 +120,9 @@ const NavbarNew = () => {
       {/* Login Modal */}
       {showLogin && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-md shadow-md w-80 relative">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-md shadow-md w-80 py-20 relative">
             <button
-              className="absolute top-2 right-2 text-gray-500 dark:text-gray-300"
+              className="absolute top-5 left-1/2 -translate-1/2 text-red-500 dark:text-red-300"
               onClick={() => setShowLogin(false)}
             >
               ✖

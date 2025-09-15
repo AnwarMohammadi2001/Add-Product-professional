@@ -18,6 +18,7 @@ const Login = ({ onClose }) => {
     } else {
       setError(res.message);
     }
+    onClose();
   };
 
   return (
