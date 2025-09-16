@@ -12,5 +12,37 @@
       "email": "anwarmohammadi1390@gmail.com",
       "password": "open 123"
     }
+  ],
+  "sliderImages": [
+    {
+      "id": "1",
+      "url": "/slider/img1.jpg",
+      "title": "Welcome to Our Shop",
+      "desc": "Find the best products at amazing prices."
+    },
+    {
+      "id": "2",
+      "url": "/slider/img2.jpg",
+      "title": "Welcome to Our Shop",
+      "desc": "Find the best products at amazing prices."
+    },
+    {
+      "id": "3",
+      "url": "/slider/img3.jpg",
+      "title": "Welcome to Our Shop",
+      "desc": "Find the best products at amazing prices."
+    },
+    {
+      "id": "4",
+      "url": "/slider/img4.jpg",
+      "title": "Welcome to Our Shop",
+      "desc": "Find the best products at amazing prices."
+    },
+    {
+      "id": "5",
+      "url": "/slider/img5.jpeg",
+      "title": "Welcome to Our Shop",
+      "desc": "Find the best products at amazing prices."
+    }
   ]
 }

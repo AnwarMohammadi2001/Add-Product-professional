@@ -7,7 +7,7 @@ import HeroSlider from "../components/HeroSlider";
 const Home = () => {
   const { currentUser } = useContext(AddContext);
   return (
-    <div className="min-h-screen mt-20 ">
+    <div className="min-h-screen  ">
       <HeroSlider />
       <ProductList />
       {currentUser ? null : <UserList />}

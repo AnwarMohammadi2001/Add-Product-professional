@@ -41,7 +41,7 @@ const HeroSlider = () => {
   }
 
   return (
-    <div className="w-full h-[80vh] md:h-[400px] lg:h-[590px] relative group">
+    <div className="w-full h-[80vh] md:h-[400px] lg:h-[690px]  relative group">
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         autoplay={{ delay: 5000 }}
@@ -65,8 +65,8 @@ const HeroSlider = () => {
               variants={contentContainer}
               initial="hidden"
               animate="show"
-              className="w-full h-full md:h-[400px] lg:h-[590px] bg-cover bg-center relative flex pt-28 md:pt-0 items-center justify-center"
-              style={{ backgroundImage: `url(${slide.image})` }}
+              className="w-full h-full md:h-[400px] lg:h-[690px] bg-cover bg-center relative flex md:pt-0 items-center justify-center"
+              style={{ backgroundImage: `url(${slide.url})` }}
             >
               <div className="absolute inset-0 bg-black/50"></div>
 

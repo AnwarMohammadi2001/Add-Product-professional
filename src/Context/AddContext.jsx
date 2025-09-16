@@ -98,7 +98,7 @@ const AddProvider = ({ children }) => {
     const fetchSliderImage = async () => {
       try {
         setUserLoading(true);
-        const res = await fetch("https://picsum.photos/1200/600");
+        const res = await fetch("http://localhost:5000/sliderImages");
         const result = await res.json();
         setSliderImage(result); // ✅ not result.users
       } catch (error) {
