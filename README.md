@@ -1,6 +1,7 @@
 # React + Vite Shop Template
 
 This project is a modern React e-commerce template built with Vite and Tailwind CSS, featuring a fully functional shopping cart, user authentication, and dark mode.
+npx json-server --watch db.json --port 5000  
 
 ## Features
 🛒 Shopping Cart

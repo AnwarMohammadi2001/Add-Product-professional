@@ -21,6 +21,9 @@ const AddProvider = ({ children }) => {
   // --- PRODUCTS ---
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  // slider image
+  const [sliderImage, setSliderImage] = useState([]);
+  const [sliderLoading, setSliderLoading] = useState(true);
 
   // --- DARK MODE ---
   const [darkMode, setDarkMode] = useState(() => {
@@ -89,6 +92,22 @@ const AddProvider = ({ children }) => {
       }
     };
     fetchUsers();
+  }, []);
+  // --- Fetch Slider image ---
+  useEffect(() => {
+    const fetchSliderImage = async () => {
+      try {
+        setUserLoading(true);
+        const res = await fetch("https://picsum.photos/1200/600");
+        const result = await res.json();
+        setSliderImage(result); // ✅ not result.users
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      } finally {
+        setSliderLoading(false);
+      }
+    };
+    fetchSliderImage();
   }, []);
 
   // --- AUTH FUNCTIONS ---
@@ -244,6 +263,8 @@ const AddProvider = ({ children }) => {
     addUser,
     deleteUser,
     updateUser,
+    sliderImage,
+    sliderLoading,
   };
 
   return <AddContext.Provider value={value}>{children}</AddContext.Provider>;
